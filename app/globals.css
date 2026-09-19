@@ -1,26 +1,73 @@
+@import "../public/css/header.css";
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #f5f5f5;
+    --background-blue: #E6F5FF;
+    --background-green: #F0FFF0;
+    --background-gray: #E6E6E6;
+    --background-accent: #F0F0F0;
+    --foreground: #0a0a15;
+    --opposite-blue: #001929;
+    --close-blue: #558eb4;
+    --opposite-green: #122b21;
+    --close-green: #709970;
+    --light: #f5f5f5;
+    --dark: #0a0a15;
+    --navy: #001929;
+    --light-blue: #558eb4;
+    --dark-green: #122b21;
+    --light-green: #709970;
+    --medium-blue: #1F5E87;
+    --background-image: url('/img/backgrounds/light.png');
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+} */
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a15;
+        --background-blue: #002640;
+        --background-green: #002900;
+        --background-gray: #262626;
+        --background-accent: #11111a;
+        --foreground: #f5f5f5;
+        --close-blue: #001929;
+        --opposite-blue: #558eb4;
+        --close-green: #122b21;
+        --opposite-green: #709970;
+        --background-image: url('/img/backgrounds/dark.png');
+    }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--background-image);
+    color: var(--foreground);
+    font-family: var(--font-main);
+}
+
+.font-title {
+    font-family: var(--font-title);
+    font-weight: bolder;
+}
+
+.font-medium {
+    font-family: var(--font-medium);
+    font-weight: 550;
+}
+
+.font-main {
+    font-family: var(--font-main);
+    font-weight: normal;
+}
+
+h1 {
+    font-family: var(--font-title);
+    font-weight: bolder;
+    font-size: 2rem;
 }
