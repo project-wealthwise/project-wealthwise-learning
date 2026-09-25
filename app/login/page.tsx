@@ -78,7 +78,6 @@ export default function LoginPage() {
     return (
         <div className="root">
             <link rel="stylesheet" href="/css/login.css" />
-            <p>{user?.email}</p>
             <Header />
             <div className="login-container">
                 <div className="login-header">
@@ -86,10 +85,10 @@ export default function LoginPage() {
                 </div>
                 <p className="login-subheader font-medium">Login to your account or create a new one</p>
                 <div className="login-separator"></div>
-                <input className="login-input email-input" type="text" placeholder="Email..." />
-                <input className="login-input password-input" type="password" placeholder="Password..." />
-                <button className="login-button font-medium" style={{width: '380px'}} onClick={handleEmailLogin}>Log In</button>
-                <button className="login-button font-medium" style={{width: '380px'}} onClick={handleSignUp}>Sign Up</button>
+                <input className="pww-input email-input" type="text" placeholder="Email..." />
+                <input className="pww-input password-input" type="password" placeholder="Password..." />
+                <button className="pww-button font-medium" style={{width: '380px'}} onClick={handleEmailLogin}>Log In</button>
+                <button className="pww-button font-medium" style={{width: '380px'}} onClick={handleSignUp}>Sign Up</button>
                 <div className="login-separator"></div>
                 <LoginButton
                     src="/img/login/google.png"

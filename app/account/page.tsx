@@ -1,19 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/header';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
+import { doc, DocumentData, getDoc, updateDoc } from 'firebase/firestore';
 
 export default function AccountPage() {
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<DocumentData | null>(null);
     const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            const userData = (await getDoc(doc(db, 'users', currentUser?.uid ?? ''))).data();
+            setUser(userData ?? null);
             setAuthLoading(false);
         });
 
@@ -27,15 +29,72 @@ export default function AccountPage() {
     }, [authLoading, router, user]);
 
     if (authLoading || !user) {
-        return <p>Loading...</p>;
+        return (
+            <>
+                <Header />
+                {/* <p>Loading...</p> */}
+            </>
+        );
     }
 
     return (
-        <div className="root">
+        <div className="root" onClick={e => {
+            if ((e.target as HTMLElement).classList.contains('modal-container')) {
+                (document.querySelector('.modal-container') as HTMLElement).style.display = 'none';
+            }
+        }}>
+            <link rel="stylesheet" href="/css/account.css" />
             <Header />
-            <h1 className="font-title">
-                Account Page
-            </h1>
+            <div className="account-container">
+                <h1 className="font-title username">{user.displayName}</h1>
+                <p className="font-medium email">{user.email}</p>
+                <img className="account-pfp" src={user.pfpUrl} alt="Profile Picture" />
+                <div className="account-roles"></div>
+                <button className="pww-button button-green button-small" onClick={() => {
+                    (document.querySelector('.modal-container') as HTMLElement).style.display = 'flex';
+                }}>
+                    Edit Profile
+                </button>
+            </div>
+            <div className="modal-container">
+                <div className="modal">
+                    <div className="close-button" onClick={() => {
+                        (document.querySelector('.modal-container') as HTMLElement).style.display = 'none';
+                    }}>&times;</div>
+                    <div className="edit-profile-container">
+                        <h2 className="font-title">Edit Profile</h2>
+                        <form className="edit-profile-form" onSubmit={async (e) => {
+                            e.preventDefault();
+                            const displayName = (document.getElementById('displayName') as HTMLInputElement).value;
+                            const pfpUrl = (document.getElementById('pfpUrl') as HTMLInputElement).value;
+                            if (auth.currentUser) {
+                                await updateProfile(auth.currentUser, {
+                                    displayName,
+                                    photoURL: pfpUrl,
+                                });
+                            }
+
+                            await updateDoc(doc(db, 'users', auth.currentUser?.uid ?? ''), {
+                                displayName,
+                                pfpUrl,
+                            });
+
+                            setUser({
+                                ...user,
+                                displayName,
+                                pfpUrl,
+                            });
+                            (document.querySelector('.modal-container') as HTMLElement).style.display = 'none';
+                        }}>
+                            <label htmlFor="displayName">Display Name</label>
+                            <input type="text" id="displayName" className="pww-input form-input" defaultValue={user.displayName} />
+                            <label htmlFor="pfpUrl">Profile Picture URL</label>
+                            <input type="text" id="pfpUrl" className="pww-input form-input" defaultValue={user.pfpUrl} />
+                            <button type="submit" className="pww-button button-green button-small">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

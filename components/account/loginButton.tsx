@@ -20,7 +20,7 @@ export default function LoginButton({
     imgHeight = 25
 }: LoginProps) {
     return (
-        <button className="login-button font-medium" onClick={e => callback(e)} style={style}>
+        <button className="pww-button font-medium" onClick={e => callback(e)} style={style}>
             <Image 
                 className="header-logo" 
                 src={src}

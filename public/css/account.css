@@ -1,0 +1,37 @@
+.edit-profile-button {
+    background-color: var(--opposite-green);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.account-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.account-pfp {
+    --pfp-size: 80px;
+    width: var(--pfp-size);
+    height: var(--pfp-size);
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--light-blue);
+}
+
+.edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+}
