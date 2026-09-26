@@ -54,7 +54,7 @@ type Subject = {
 };
 
 export async function getLessons(subjectId: string): Promise<Lesson[]> {
-    const lessonDocs = await getDocs(collection(db, 'subjects', subjectId));
+    const lessonDocs = await getDocs(collection(db, 'subjects', subjectId, 'lessons'));
     const res: Lesson[] = lessonDocs.docs.map(doc => doc.data() as Lesson);
     return res;
 }

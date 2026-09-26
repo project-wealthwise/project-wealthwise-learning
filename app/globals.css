@@ -1,11 +1,10 @@
 /* MARK: Imports
 */
-@import "../public/css/header.css";
 @import "tailwindcss";
-@import "header.css";
-@import "login.css";
-@import "account.css";
-@import "curriculum.css";
+@import "./css/header.css";
+@import "./css/login.css";
+@import "./css/account.css";
+@import "./css/curriculum.css";
 
 /* MARK: Variables
 */

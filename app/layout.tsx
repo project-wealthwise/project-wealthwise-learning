@@ -2,28 +2,18 @@ import type { Metadata } from 'next';
 import { Raleway, Inter, DM_Sans } from 'next/font/google';
 import './globals.css';
 
-// const geistSans = Geist({
-//         variable: '--font-geist-sans',
-//         subsets: ['latin'],
-// });
-
-// const geistMono = Geist_Mono({
-//         variable: '--font-geist-mono',
-//         subsets: ['latin'],
-// });
-
 // Initialize Fonts
-Raleway({
+const raleway = Raleway({
     variable: '--font-title',
     subsets: ['latin']
 });
 
-Inter({
+const inter = Inter({
     variable: '--font-medium',
     subsets: ['latin']
 });
 
-DM_Sans({
+const dm_sans = DM_Sans({
     variable: '--font-main',
     subsets: ['latin']
 });

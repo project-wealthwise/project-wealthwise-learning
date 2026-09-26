@@ -5,6 +5,7 @@ import Header from '@/components/header';
 import { auth, db } from '@/lib/firebase';
 import { doc, DocumentData, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import CurriculumSubject from '@/components/curriculum/subject';
 
 const editorRoles = ['admin', 'curriculum-developer'];
 
@@ -46,7 +47,7 @@ export default function CurriculumPage() {
         <div className="root">
             <Header />
             <div className="curriculum-container">
-                test
+                <CurriculumSubject subjectId='budgeting-3-5'/>
             </div>
         </div>
     );
