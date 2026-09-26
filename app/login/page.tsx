@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
     GoogleAuthProvider,
     onAuthStateChanged,
@@ -10,28 +10,28 @@ import {
     User,
     UserCredential,
     createUserWithEmailAndPassword,
-} from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
-import Header from "@/components/header";
-import LoginButton from "@/components/account/loginButton";
+} from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase';
+import Header from '@/components/header';
+import LoginButton from '@/components/account/loginButton';
+import { FirebaseError } from 'firebase/app';
 
 async function firestoreLogin(result: UserCredential) {
     await setDoc(doc(db, 'users', result.user.uid), {
-       displayName: result.user.displayName ?? result.user.email?.split('@')[0] ?? 'User', 
-       email: result.user.email, 
-       uid: result.user.uid, 
-       pfpUrl: result.user.photoURL ?? '/img/login/pfp-default.png',
-       roles: []
+        displayName: result.user.displayName ?? result.user.email?.split('@')[0] ?? 'User', 
+        email: result.user.email, 
+        uid: result.user.uid, 
+        pfpUrl: result.user.photoURL ?? '/img/login/pfp-default.png',
+        roles: []
     });
 }
 
 export default function LoginPage() {
-    const [user, setUser] = useState<User | null>(null);
+    const [, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser);
             setUser(currentUser);
         });
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
             // console.log(result.user);
             await firestoreLogin(result);
         } catch (error) {
-            console.error("Google login failed:", error);
+            console.error('Google login failed:', error);
         }
     };
 
@@ -58,16 +58,18 @@ export default function LoginPage() {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             await firestoreLogin(result);
             localStorage.setItem('loggedIn', 'y');
-        } catch (error: any) {
-            if (error.code === 'auth/email-already-in-use')
-                alert('Email already in use.');
-            else if (error.code === 'auth/invalid-email')
-                alert('Invalid email address.');
-            else if (error.code === 'auth/weak-password')
-                alert('Password is too weak. Please use at least 6 characters.');
-            else
-                alert('An error occurred during sign up.');
-            console.error("Email sign up failed:", error);
+        } catch (error: FirebaseError | Error | unknown) {
+            if (error instanceof FirebaseError) {
+                if (error.code === 'auth/email-already-in-use')
+                    alert('Email already in use.');
+                else if (error.code === 'auth/invalid-email')
+                    alert('Invalid email address.');
+                else if (error.code === 'auth/weak-password')
+                    alert('Password is too weak. Please use at least 6 characters.');
+                else
+                    alert('An error occurred during sign up.');
+                console.error('Email sign up failed:', error);
+            }
         }
     };
 
@@ -76,23 +78,30 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="root">
-            <link rel="stylesheet" href="/css/login.css" />
+        <div className='root'>
             <Header />
-            <div className="login-container">
-                <div className="login-header">
-                    <h1 className="font-title">Login</h1>
+            <div className='login-container'>
+                <div className='login-header'>
+                    <h1 className='font-title'>Login</h1>
                 </div>
-                <p className="login-subheader font-medium">Login to your account or create a new one</p>
-                <div className="login-separator"></div>
-                <input className="pww-input email-input" type="text" placeholder="Email..." />
-                <input className="pww-input password-input" type="password" placeholder="Password..." />
-                <button className="pww-button font-medium" style={{width: '380px'}} onClick={handleEmailLogin}>Log In</button>
-                <button className="pww-button font-medium" style={{width: '380px'}} onClick={handleSignUp}>Sign Up</button>
-                <div className="login-separator"></div>
+                <p className='login-subheader font-medium'>Login to your account or create a new one</p>
+                <div className='login-separator'></div>
+                <input className='pww-input email-input' type='text' placeholder='Email...' />
+                <input className='pww-input password-input' type='password' placeholder='Password...' />
+                <button 
+                    className='pww-button font-medium' 
+                    style={{width: '380px'}} 
+                    onClick={handleEmailLogin}
+                >Log In</button>
+                <button 
+                    className='pww-button font-medium' 
+                    style={{width: '380px'}} 
+                    onClick={handleSignUp}
+                >Sign Up</button>
+                <div className='login-separator'></div>
                 <LoginButton
-                    src="/img/login/google.png"
-                    text="Continue with Google"
+                    src='/img/login/google.png'
+                    text='Continue with Google'
                     callback={handleGoogleLogin}
                     style={{width: '300px'}}
                 />

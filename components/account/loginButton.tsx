@@ -1,9 +1,9 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 type LoginProps = {
     src: string,
     text: string,
-    callback: Function,
+    callback: (e: React.MouseEvent<HTMLButtonElement>) => void,
     style?: React.CSSProperties,
     imgAlt?: string,
     imgWidth?: number,
@@ -30,5 +30,5 @@ export default function LoginButton({
             />
             {text}
         </button>
-    )
+    );
 }

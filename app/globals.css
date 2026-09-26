@@ -1,7 +1,14 @@
-/* MARK: Variables
+/* MARK: Imports
 */
 @import "../public/css/header.css";
 @import "tailwindcss";
+@import "header.css";
+@import "login.css";
+@import "account.css";
+@import "curriculum.css";
+
+/* MARK: Variables
+*/
 
 :root {
     --background: #f5f5f5;

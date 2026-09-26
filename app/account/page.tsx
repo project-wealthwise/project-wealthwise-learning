@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/header';
@@ -23,9 +24,7 @@ export default function AccountPage() {
     }, []);
 
     useEffect(() => {
-        if (!authLoading && !user) {
-            router.replace('/login');
-        }
+        if (!authLoading && !user) router.replace('/login');
     }, [authLoading, router, user]);
 
     if (authLoading || !user) {
@@ -39,16 +38,20 @@ export default function AccountPage() {
 
     return (
         <div className="root" onClick={e => {
-            if ((e.target as HTMLElement).classList.contains('modal-container')) {
+            if ((e.target as HTMLElement).classList.contains('modal-container'))
                 (document.querySelector('.modal-container') as HTMLElement).style.display = 'none';
-            }
         }}>
-            <link rel="stylesheet" href="/css/account.css" />
             <Header />
             <div className="account-container">
                 <h1 className="font-title username">{user.displayName}</h1>
                 <p className="font-medium email">{user.email}</p>
-                <img className="account-pfp" src={user.pfpUrl} alt="Profile Picture" />
+                <Image 
+                    className="account-pfp" 
+                    src={user.pfpUrl} 
+                    alt="Profile Picture" 
+                    width={100} 
+                    height={100} 
+                />
                 <div className="account-roles"></div>
                 <button className="pww-button button-green button-small" onClick={() => {
                     (document.querySelector('.modal-container') as HTMLElement).style.display = 'flex';
@@ -87,9 +90,19 @@ export default function AccountPage() {
                             (document.querySelector('.modal-container') as HTMLElement).style.display = 'none';
                         }}>
                             <label htmlFor="displayName">Display Name</label>
-                            <input type="text" id="displayName" className="pww-input form-input" defaultValue={user.displayName} />
+                            <input 
+                                type="text" 
+                                id="displayName" 
+                                className="pww-input form-input" 
+                                defaultValue={user.displayName} 
+                            />
                             <label htmlFor="pfpUrl">Profile Picture URL</label>
-                            <input type="text" id="pfpUrl" className="pww-input form-input" defaultValue={user.pfpUrl} />
+                            <input 
+                                type="text" 
+                                id="pfpUrl" 
+                                className="pww-input form-input" 
+                                defaultValue={user.pfpUrl} 
+                            />
                             <button type="submit" className="pww-button button-green button-small">Save Changes</button>
                         </form>
                     </div>

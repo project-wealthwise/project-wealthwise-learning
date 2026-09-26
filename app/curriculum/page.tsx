@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import Header from '@/components/header';
 import { auth, db } from '@/lib/firebase';
-import { doc, DocumentData, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, DocumentData, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 
 const editorRoles = ['admin', 'curriculum-developer'];
@@ -24,12 +24,9 @@ export default function CurriculumPage() {
     }, []);
 
     useEffect(() => {
-        if (!authLoading && !user) {
-            router.replace('/login');
-        }
-        if (!authLoading && user && !editorRoles.some(role => user.roles?.includes(role))) {
+        if (!authLoading && !user) router.replace('/login');
+        if (!authLoading && user && !editorRoles.some(role => user.roles?.includes(role)))
             router.replace('/account');
-        }
     }, [authLoading, router, user]);
 
     if (authLoading || !user) {
@@ -47,11 +44,10 @@ export default function CurriculumPage() {
 
     return (
         <div className="root">
-            <link rel="stylesheet" href="/css/curriculum.css" />
             <Header />
             <div className="curriculum-container">
                 test
             </div>
         </div>
-    )
+    );
 }
