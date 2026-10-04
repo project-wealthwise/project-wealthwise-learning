@@ -1,4 +1,4 @@
-type ModalOpenCallback = (modalId: string) => void;
+type ModalOpenCallback = (modalId: string, data: any) => void;
 type ModalCloseCallback = (modalId: string) => void;
 
 const modalOpenCallbacks: ModalOpenCallback[] = [];
@@ -12,10 +12,10 @@ export function onModalClosed(callback: ModalCloseCallback) {
 }
 
 const modalStack: string[] = [];
-export function openModal(modalId: string) {
+export function openModal(modalId: string, data?: any) {
     modalStack.push(modalId);
     for (const callback of modalOpenCallbacks) {
-        callback(modalId);
+        callback(modalId, data);
     }
 }
 

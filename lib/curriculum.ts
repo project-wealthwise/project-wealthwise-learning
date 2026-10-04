@@ -1,5 +1,17 @@
-import { getDoc, doc, getDocs, collection } from "firebase/firestore";
+import { getDoc, doc, getDocs, collection, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+
+export const resourceTypes = [
+    'video',
+    'slideshow'
+] as const;
+
+export const resourceTypeNames = {
+    video: 'Video',
+    slideshow: 'Slideshow'
+};
+
+type ResourceType = typeof resourceTypes;
 
 /**
  * Type for curriculum resources
@@ -8,8 +20,30 @@ type Resource = {
     id: string,
     name: string,
     link: string,
-    type: 'video' | 'slideshow',
+    type: ResourceType,
+    ref?: [string, ...string[]],
     description?: string
+};
+
+/**
+ * Type for video resources
+ */
+type VideoResource = Resource & {
+    type: 'video';
+};
+
+/**
+ * Type for slideshow resources
+ */
+type SlideshowResource = Resource & {
+    type: 'slideshow';
+};
+
+/**
+ * Type for resource component properties
+ */
+type ResourceProps = {
+    resource: Resource
 };
 
 /**
@@ -55,8 +89,12 @@ type Subject = {
 
 export async function getLessons(subjectId: string): Promise<Lesson[]> {
     const lessonDocs = await getDocs(collection(db, 'subjects', subjectId, 'lessons'));
-    const res: Lesson[] = lessonDocs.docs.map(doc => doc.data() as Lesson);
-    return res;
+    const lessons: any[] = lessonDocs.docs.map(doc => ({...doc.data(), id: doc.id}));
+    
+    for (const lesson of lessons)
+        lesson.resources = lesson.resources.map((r: any) => ({...r, ref: ['subjects', subjectId, 'lessons', lesson.id]}));
+
+    return lessons as Lesson[];
 }
 
 export async function getSubject(subjectId: string): Promise<Subject | undefined> {
@@ -64,9 +102,14 @@ export async function getSubject(subjectId: string): Promise<Subject | undefined
     if (!subjectDoc.exists()) return undefined;
     
     const subjectLesssons = await getLessons(subjectId);
-    const subjectData = { ...subjectDoc.data(), lessons: subjectLesssons, id: subjectId };
-    return subjectData as Subject;
-
+    const data = subjectDoc.data();
+    data.resources = data.resources.map((r: any) => ({...r, ref: ['subjects', subjectId]}));
+    const subjectData = { ...data, lessons: subjectLesssons, id: subjectId } as Subject;
+    return subjectData;
 }
 
-export type { Resource, QuestionAnswer, Question, Lesson, Subject };
+export async function saveSubjectChanges(subject: Subject) {
+    await setDoc(doc(db, 'subjects', subject.id), subject);
+}
+
+export type { Resource, VideoResource, SlideshowResource, ResourceType, ResourceProps, QuestionAnswer, Question, Lesson, Subject };

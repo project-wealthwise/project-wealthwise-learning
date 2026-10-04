@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/header';
 import { auth, db } from '@/lib/firebase';
 import { doc, DocumentData, getDoc, updateDoc } from 'firebase/firestore';
-import { Modal } from '@/components/curriculum/modal';
-import { closeModalHandler, openModal } from '@/lib/modal';
+import { Modal } from '@/components/modal';
+import { openModal } from '@/lib/modal';
 
 export default function AccountPage() {
     const router = useRouter();
@@ -39,7 +39,7 @@ export default function AccountPage() {
     }
 
     return (
-        <div className="root" onClick={(e) => closeModalHandler(e.nativeEvent)}>
+        <div className="root" >
             <Header />
             <div className="account-container">
                 <h1 className="font-title username">{user.displayName}</h1>
@@ -54,7 +54,6 @@ export default function AccountPage() {
                 <div className="account-roles"></div>
                 <button className="pww-button button-green button-small" onClick={() => {
                     openModal('edit-profile-modal');
-                    console.log('test');
                 }}>
                     Edit Profile
                 </button>
