@@ -25,6 +25,10 @@
     font-size: 1.75rem;
 }
 
+.delete-subject-button {
+    margin-top: 20px;
+}
+
 .curriculum-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

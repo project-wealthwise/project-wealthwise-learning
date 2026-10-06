@@ -56,7 +56,7 @@ export default function CurriculumPage() {
         <div className="root">
             <Header />
             <div className="curriculum-container">
-                {subjects.map((subject) => (
+                {subjects.filter(subject => !subject.deleted).map((subject) => (
                     <CurriculumSubject key={subject.id} subjectId={subject.id} />
                 ))}
                 <button
@@ -65,6 +65,7 @@ export default function CurriculumPage() {
                         const subject: Subject = {
                             id: autoId(),
                             name: 'New Subject',
+                            resources: [],
                             lessons: [
                                 {
                                     id: autoId(),
@@ -74,8 +75,8 @@ export default function CurriculumPage() {
                                     questions: []
                                 }
                             ],
-                            resources: []
                         };
+                        console.log(subject, subject.lessons);
 
                         await saveSubjectChanges(subject);
                         await setDoc(doc(db, 'subjects', subject.id, 'lessons', subject.lessons[0].id), subject.lessons[0]);

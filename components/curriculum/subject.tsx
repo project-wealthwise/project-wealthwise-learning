@@ -32,6 +32,7 @@ export default function CurriculumSubject({
     }, [subjectId]);
 
     if (subjectLoading) return (<div />); 
+    if (subject?.deleted) return (<div style={{ display: 'none' }} />); // Hide deleted subjects
 
     const lessons = subject?.lessons.sort((a, b) => parseInt(a.index) - parseInt(b.index)).map((lesson, i) => 
         <CurriculumLesson 
@@ -100,6 +101,16 @@ export default function CurriculumSubject({
                     }}
                 ><b>+</b> Create New Lesson</button>
             </div>
+            <button
+                className="pww-button button-small button-red delete-subject-button"
+                onClick={async (e) => {
+                    if (!window.confirm("Are you sure you want to delete this subject?")) return;
+                    if (subject) {
+                        await saveSubjectChanges({ ...subject, deleted: true });
+                        setSubject({ ...subject, deleted: true });
+                    }
+                }}
+            ><b>-</b> Delete Subject</button>
         </div>
     );
 }

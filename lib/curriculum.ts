@@ -72,7 +72,8 @@ type Lesson = {
     index: string,
     description?: string,
     resources: Resource[],
-    questions: Question[]
+    questions: Question[],
+    deleted?: boolean
 };
 
 /**
@@ -84,7 +85,8 @@ type Subject = {
     type?: string,
     description?: string,
     lessons: Lesson[],
-    resources: Resource[]
+    resources: Resource[],
+    deleted?: boolean
 };
 
 export async function getLessons(subjectId: string): Promise<Lesson[]> {
@@ -109,8 +111,7 @@ export async function getSubject(subjectId: string): Promise<Subject | undefined
 }
 
 export async function saveSubjectChanges(subject: Subject) {
-    let processed: any = subject;
-    delete processed.lessons;
+    const processed = (({ lessons, ...o }) => o)(subject);
     await setDoc(doc(db, 'subjects', subject.id), processed);
 }
 

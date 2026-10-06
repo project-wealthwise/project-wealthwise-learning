@@ -12,6 +12,7 @@
     --background: #f5f5f5;
     --background-blue: #E6F5FF;
     --background-green: #F0FFF0;
+    --background-red: #FFC2C2;
     --background-gray: #E6E6E6;
     --background-accent: #F0F0F0;
     --foreground: #0a0a15;
@@ -23,6 +24,9 @@
     --opposite-green: #122b21;
     --close-green: #709970;
 
+    --close-red: #DB6161;
+    --opposite-red: #6D0D0D;
+
     --light: #f5f5f5;
     --dark: #0a0a15;
 
@@ -31,6 +35,8 @@
     --dark-green: #122b21;
     --light-green: #709970;
     --medium-blue: #1F5E87;
+    --light-red: #DB6161;
+    --dark-red: #6D0D0D;
 
     --background-image: url('/img/backgrounds/light.png');
 }
@@ -47,6 +53,7 @@
         --background: #0a0a15;
         --background-blue: #002640;
         --background-green: #002900;
+        --background-red: #470000;
         --background-gray: #262626;
         --background-accent: #11111a;
         --foreground: #f5f5f5;
@@ -57,6 +64,9 @@
 
         --close-green: #122b21;
         --opposite-green: #709970;
+
+        --opposite-red: #DB6161;
+        --close-red: #6D0D0D;
 
         --background-image: url('/img/backgrounds/dark.png');
     }
@@ -103,7 +113,7 @@ h1 {
     border-radius: 10px;
     cursor: pointer;
     font-size: 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .button-small {
@@ -129,6 +139,12 @@ h1 {
 .button-green:hover {
     background-color: var(--background-green);
     color: var(--foreground);
+}
+
+.button-red:hover {
+    background-color: var(--background-red);
+    color: var(--foreground);
+    border-color: var(--opposite-red);
 }
 
 .pww-input {
