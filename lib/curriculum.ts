@@ -109,7 +109,13 @@ export async function getSubject(subjectId: string): Promise<Subject | undefined
 }
 
 export async function saveSubjectChanges(subject: Subject) {
-    await setDoc(doc(db, 'subjects', subject.id), subject);
+    let processed: any = subject;
+    delete processed.lessons;
+    await setDoc(doc(db, 'subjects', subject.id), processed);
+}
+
+export async function saveLessonChanges(subjectId: string, lesson: Lesson) {
+    await setDoc(doc(db, 'subjects', subjectId, 'lessons', lesson.id), lesson);
 }
 
 export type { Resource, VideoResource, SlideshowResource, ResourceType, ResourceProps, QuestionAnswer, Question, Lesson, Subject };

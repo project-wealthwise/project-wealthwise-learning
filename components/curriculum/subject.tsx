@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSubject, Resource, ResourceType, saveSubjectChanges, Subject } from "@/lib/curriculum";
+import { getSubject, Lesson, Resource, ResourceType, saveLessonChanges, saveSubjectChanges, Subject } from "@/lib/curriculum";
 import CurriculumLesson from "./lesson";
 import CurriculumResource from "./resource";
 import { autoId } from "@/lib/firebase";
@@ -33,10 +33,11 @@ export default function CurriculumSubject({
 
     if (subjectLoading) return (<div />); 
 
-    const lessons = subject?.lessons.map((lesson, i) => 
+    const lessons = subject?.lessons.sort((a, b) => parseInt(a.index) - parseInt(b.index)).map((lesson, i) => 
         <CurriculumLesson 
             key={i}
             lesson={lesson}
+            subjectId={subjectId}
         />
     );
 
@@ -63,21 +64,41 @@ export default function CurriculumSubject({
                             name: 'New Resource',
                             link: '',
                             type: 'video' as unknown as ResourceType,
-                            description: ''
+                            description: '',
+                            ref: ['subjects', subjectId, 'resources']
                         };
 
                         setSubject((current) => current
                             ? { ...current, resources: [...current.resources, resource] }
                             : current);
 
-                        console.log(subject);
-                        // saveSubjectChanges(subject);
+                        if (subject) saveSubjectChanges(subject);
                     }}
                 ><b>+</b> Create New Resource</button>
             </div>
             <h2 className="subject-header font-title">Subject Lessons</h2>
             <div className="subject-lessons">
                 {lessons}
+                <button
+                    className="pww-button button-small button-green create-resource-button"
+                    onClick={(e) => {
+                        const lesson: Lesson = {
+                            id: autoId(),
+                            name: 'New Lesson',
+                            index: `${subject?.lessons.length || 0}`,
+                            description: '',
+                            resources: [],
+                            questions: []
+                        };
+
+                        setSubject((current) => current
+                            ? { ...current, lessons: [...current.lessons, lesson] }
+                            : current);
+
+                        if (subject) saveSubjectChanges(subject);
+                        saveLessonChanges(subjectId, lesson); // Since this just sets the lesson doc, this creates the new lesson in the database
+                    }}
+                ><b>+</b> Create New Lesson</button>
             </div>
         </div>
     );

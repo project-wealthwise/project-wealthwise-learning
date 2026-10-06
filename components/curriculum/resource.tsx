@@ -1,4 +1,4 @@
-import { Resource, ResourceProps, resourceTypeNames, resourceTypes } from "@/lib/curriculum"
+import { Resource, ResourceProps, ResourceType, resourceTypeNames, resourceTypes } from "@/lib/curriculum"
 import CurriculumVideoResource from "./resources/video";
 import CurriculumSlideshowResource from "./resources/slideshow";
 import { Modal } from "../modal";
@@ -51,36 +51,51 @@ export default function CurriculumResource({
                     <h2 className="font-title edit-resource-header">Edit {resource.name}</h2>
                     <form className="edit-resource-form" onSubmit={async (e) => {
                         e.preventDefault();
+                        const form = e.currentTarget;
                         if (!resource.ref) {
                             console.error('No ref attached to resource');
                             alert('An error occured.');
                             return;
                         }
-                        // code
-                        const resourceName = (document.querySelector('#resourceName') as HTMLInputElement).value;
-                        const resourceDesc = (document.querySelector('#resourceDesc') as HTMLInputElement).value;
-                        const resourceLink = (document.querySelector('#resourceLink') as HTMLInputElement).value;
+                        const resourceName = (form.querySelector('#resourceName') as HTMLInputElement).value;
+                        const resourceDesc = (form.querySelector('#resourceDesc') as HTMLInputElement).value;
+                        const resourceLink = (form.querySelector('#resourceLink') as HTMLInputElement).value;
 
                         const newResource: Resource = {
                             id: resource.id,
                             name: resourceName,
                             link: resourceLink,
-                            type: resource.type,
+                            type: resourceType as unknown as ResourceType,
                             description: resourceDesc
                         };
 
-                        const rDoc = await getDoc(doc(db, ...resource.ref));
-                        const resources: Resource[] = rDoc.data()?.resources;
-                        if (!resources) {
+                        const resourceDoc = doc(db, ...resource.ref);
+                        const rDoc = await getDoc(resourceDoc);
+                        const documentData = rDoc.data();
+                        let fieldToUpdate: string | undefined;
+                        const updateResourceArray = (value: any, topLevelField?: string): boolean => {
+                            if (!value || typeof value !== 'object') return false;
+                            if (Array.isArray(value)) {
+                                const index = value.findIndex((item: Resource) => item?.id === resource.id);
+                                if (index !== -1 && topLevelField) {
+                                    value[index] = newResource;
+                                    fieldToUpdate = topLevelField;
+                                    return true;
+                                }
+                                return value.some(item => updateResourceArray(item, topLevelField));
+                            }
+                            return Object.entries(value).some(([key, child]) =>
+                                updateResourceArray(child, topLevelField ?? key)
+                            );
+                        };
+
+                        if (!documentData || !updateResourceArray(documentData)) {
                             console.error(`Could't find resources from ref ${resource.ref}.`);
                             return;
                         }
 
-                        const rIndex = resources.findIndex(r => r.id === resource.id);
-                        resources[rIndex] = newResource;
-                        
                         closeModal();
-                        await updateDoc(doc(db, ...resource.ref), { resources });
+                        await updateDoc(resourceDoc, { [fieldToUpdate!]: documentData[fieldToUpdate!] });
                     }}>
                         <div>
                             <label htmlFor="resourceName">Resource Name</label>
