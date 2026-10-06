@@ -16,6 +16,15 @@
     background-color: color-mix(in srgb, var(--background-blue), transparent 40%);
 }
 
+.add-subject-button {
+    padding: 14px;
+    padding-top: 5px;
+    border-radius: 18px;
+    border: 1px solid var(--foreground);
+    background-color: color-mix(in srgb, var(--background-blue), transparent 40%);
+    font-size: 1.75rem;
+}
+
 .curriculum-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
