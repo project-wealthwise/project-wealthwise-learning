@@ -14,16 +14,16 @@ export function onModalClosed(callback: ModalCloseCallback) {
 const modalStack: string[] = [];
 export function openModal(modalId: string, data?: any) {
     modalStack.push(modalId);
-    for (const callback of modalOpenCallbacks) {
+    for (const callback of modalOpenCallbacks) 
         callback(modalId, data);
-    }
+    
 }
 
 export function closeModal() {
     const modalId: string = modalStack.pop() || '';
-    for (const callback of modalCloseCallbacks) {
+    for (const callback of modalCloseCallbacks) 
         callback(modalId);
-    }
+    
 }
 
 export function closeModalHandler(e: Event) {

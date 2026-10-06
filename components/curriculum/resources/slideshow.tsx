@@ -1,10 +1,10 @@
-import { ResourceProps } from "@/lib/curriculum";
+import { ResourceProps } from '@/lib/curriculum';
 
 export default function CurriculumSlideshowResource({
     resource
 }: ResourceProps) {
-    const presentationId = 
-        resource.link.match(/https:\/\/docs\.google\.com\/presentation\/d\/(.*?)[\/?&]/)?.[1]
+    const presentationId 
+        = resource.link.match(/https:\/\/docs\.google\.com\/presentation\/d\/(.*?)[\/?&]/)?.[1]
         || '';
     const embedUrl = `https://docs.google.com/presentation/d/${presentationId}/embed`;
 
@@ -13,10 +13,10 @@ export default function CurriculumSlideshowResource({
             <div
                 style={{ 
                     left: 0, 
-                    width: "100%", 
+                    width: '100%', 
                     height: 0, 
-                    position: "relative", 
-                    paddingBottom: "56.25%", 
+                    position: 'relative', 
+                    paddingBottom: '56.25%', 
                     paddingTop: 30 
                 }}
             >
@@ -25,9 +25,9 @@ export default function CurriculumSlideshowResource({
                     style={{ 
                         top: 0, 
                         left: 0, 
-                        width: "100%", 
-                        height: "100%", 
-                        position: "absolute", 
+                        width: '100%', 
+                        height: '100%', 
+                        position: 'absolute', 
                         border: 0 
                     }} 
                     allowFullScreen 
@@ -35,5 +35,5 @@ export default function CurriculumSlideshowResource({
                 />
             </div>
         </>
-    )
+    );
 }

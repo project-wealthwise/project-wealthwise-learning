@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Lesson, Question, Resource, ResourceType, saveLessonChanges } from "@/lib/curriculum";
-import CurriculumResource from "./resource";
-import { Modal } from "../modal";
-import { openModal } from "@/lib/modal";
-import { autoId } from "@/lib/firebase";
-import CurriculumQuestion from "./question";
+import { useState } from 'react';
+import { Lesson, Question, Resource, ResourceType, saveLessonChanges } from '@/lib/curriculum';
+import CurriculumResource from './resource';
+import { Modal } from '../modal';
+import { openModal } from '@/lib/modal';
+import { autoId } from '@/lib/firebase';
+import CurriculumQuestion from './question';
 
 // import { useEffect, useState } from "react";
 // import { getSubject, Subject } from "@/lib/curriculum";
@@ -45,12 +45,12 @@ export default function CurriculumLesson({
             <div className='lesson-description'>{lesson?.description}</div>
             <button 
                 className="pww-button button-green button-small"
-                onClick={(e) => openModal(`${lesson.id}-resources-modal`)}
+                onClick={() => openModal(`${lesson.id}-resources-modal`)}
                 style={{margin: '0.5rem 0'}}
             >Edit Resources</button>
             <button 
                 className="pww-button button-green button-small"
-                onClick={(e) => openModal(`${lesson.id}-questions-modal`)}
+                onClick={() => openModal(`${lesson.id}-questions-modal`)}
             >Edit Questions</button>
             <Modal modalId={`${lesson.id}-resources-modal`}>
                 <h2 className="font-title edit-resource-header">Edit {lesson.name} Resources</h2>
@@ -59,7 +59,7 @@ export default function CurriculumLesson({
                 </div>
                 <button
                     className="pww-button button-small button-green create-resource-button"
-                    onClick={(e) => {
+                    onClick={() => {
                         const resource: Resource = {
                             id: autoId(),
                             name: 'New Resource',
@@ -80,7 +80,7 @@ export default function CurriculumLesson({
                 {questionElements}
                 <button 
                     className="pww-button button-small button-green create-resource-button"
-                    onClick={(e) => {
+                    onClick={() => {
                         const question: Question = {
                             id: autoId(),
                             question: 'New Question',
@@ -99,8 +99,8 @@ export default function CurriculumLesson({
                 ><b>+</b> Create New Question</button>
                 <button
                     className="pww-button button-green button-small question-save-button"
-                    onClick={(e) => {
-                        saveLessonChanges(subjectId, { ...lesson, questions: questions });
+                    onClick={() => {
+                        saveLessonChanges(subjectId, { ...lesson, questions });
                     }}
                 >Save Changes</button>
             </Modal>

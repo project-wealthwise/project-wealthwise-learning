@@ -1,5 +1,5 @@
-import { closeModal, onModalClosed, onModalOpened } from "@/lib/modal";
-import { Component, ReactNode, useEffect, useState } from "react";
+import { closeModal, onModalClosed, onModalOpened } from '@/lib/modal';
+import { ReactNode, useEffect, useState } from 'react';
 
 type ModalProps = {
     children: ReactNode,
@@ -14,14 +14,12 @@ export function Modal({
 
     useEffect(() => {
         const unsubscribe = onModalOpened((openedModalId) => {
-            console.log('open', openedModalId, modalId, openedModalId === modalId);
-            if (openedModalId === modalId) {
+            if (openedModalId === modalId) 
                 setVisibility(true);
-            }
         });
 
         return unsubscribe;
-    }, []);
+    }, [modalId]);
 
     useEffect(() => {
         const unsubscribe = onModalClosed((closedModalId) => {
@@ -30,7 +28,7 @@ export function Modal({
         });
 
         return unsubscribe;
-    }, []);
+    }, [modalId]);
 
     return (
         <div className="modal-container" id={modalId} style={{display: visible ? 'block' : 'none'}}>

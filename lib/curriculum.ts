@@ -1,5 +1,5 @@
-import { getDoc, doc, getDocs, collection, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getDoc, doc, getDocs, collection, setDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export const resourceTypes = [
     'video',
@@ -94,13 +94,15 @@ export async function getLessons(subjectId: string): Promise<Lesson[]> {
     const lessons: any[] = lessonDocs.docs.map(doc => ({...doc.data(), id: doc.id}));
     
     for (const lesson of lessons)
-        lesson.resources = lesson.resources.map((r: any) => ({...r, ref: ['subjects', subjectId, 'lessons', lesson.id]}));
+        lesson.resources = lesson.resources.map((r: any) => 
+            ({...r, ref: ['subjects', subjectId, 'lessons', lesson.id]})
+        );
 
     return lessons as Lesson[];
 }
 
 export async function getSubject(subjectId: string): Promise<Subject | undefined> {
-    const subjectDoc = await getDoc(doc(db, "subjects", subjectId));
+    const subjectDoc = await getDoc(doc(db, 'subjects', subjectId));
     if (!subjectDoc.exists()) return undefined;
     
     const subjectLesssons = await getLessons(subjectId);
@@ -119,4 +121,14 @@ export async function saveLessonChanges(subjectId: string, lesson: Lesson) {
     await setDoc(doc(db, 'subjects', subjectId, 'lessons', lesson.id), lesson);
 }
 
-export type { Resource, VideoResource, SlideshowResource, ResourceType, ResourceProps, QuestionAnswer, Question, Lesson, Subject };
+export type { 
+    Resource, 
+    VideoResource, 
+    SlideshowResource, 
+    ResourceType, 
+    ResourceProps, 
+    QuestionAnswer, 
+    Question, 
+    Lesson, 
+    Subject 
+};

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { getSubject, Lesson, Resource, ResourceType, saveLessonChanges, saveSubjectChanges, Subject } from "@/lib/curriculum";
-import CurriculumLesson from "./lesson";
-import CurriculumResource from "./resource";
-import { autoId } from "@/lib/firebase";
+import { useEffect, useState } from 'react';
+import { getSubject, Lesson, Resource, ResourceType, saveLessonChanges, saveSubjectChanges, Subject } from '@/lib/curriculum';
+import CurriculumLesson from './lesson';
+import CurriculumResource from './resource';
+import { autoId } from '@/lib/firebase';
 
 type SubjectProps = {
     subjectId: string
@@ -59,7 +59,7 @@ export default function CurriculumSubject({
                 </div>
                 <button
                     className="pww-button button-small button-green create-resource-button"
-                    onClick={(e) => {
+                    onClick={() => {
                         const resource: Resource = {
                             id: autoId(),
                             name: 'New Resource',
@@ -82,7 +82,7 @@ export default function CurriculumSubject({
                 {lessons}
                 <button
                     className="pww-button button-small button-green create-resource-button"
-                    onClick={(e) => {
+                    onClick={() => {
                         const lesson: Lesson = {
                             id: autoId(),
                             name: 'New Lesson',
@@ -103,8 +103,8 @@ export default function CurriculumSubject({
             </div>
             <button
                 className="pww-button button-small button-red delete-subject-button"
-                onClick={async (e) => {
-                    if (!window.confirm("Are you sure you want to delete this subject?")) return;
+                onClick={async () => {
+                    if (!window.confirm('Are you sure you want to delete this subject?')) return;
                     if (subject) {
                         await saveSubjectChanges({ ...subject, deleted: true });
                         setSubject({ ...subject, deleted: true });

@@ -1,12 +1,12 @@
-import { Resource, ResourceProps, ResourceType, resourceTypeNames, resourceTypes } from "@/lib/curriculum"
-import CurriculumVideoResource from "./resources/video";
-import CurriculumSlideshowResource from "./resources/slideshow";
-import { Modal } from "../modal";
-import { closeModal, openModal } from "@/lib/modal";
-import { useState } from "react";
-import Dropdown from "../dropdown";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { Resource, ResourceProps, ResourceType, resourceTypeNames, resourceTypes } from '@/lib/curriculum';
+import CurriculumVideoResource from './resources/video';
+import CurriculumSlideshowResource from './resources/slideshow';
+import { Modal } from '../modal';
+import { closeModal, openModal } from '@/lib/modal';
+import { useState } from 'react';
+import Dropdown from '../dropdown';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const resourceElements = {
     video: CurriculumVideoResource,
@@ -30,11 +30,11 @@ export default function CurriculumResource({
                 <h2 className='resource-title font-medium'>{resource.name}</h2>
                 <button 
                     className="pww-button button-green button-small"
-                    onClick={(e) => openModal(editModalId)}
+                    onClick={() => openModal(editModalId)}
                 >Edit</button>
                 <button 
                     className="pww-button button-blue button-small"
-                    onClick={(e) => openModal(viewModalId)}
+                    onClick={() => openModal(viewModalId)}
                 >View</button>
             </div>
             <div className='resource-desc'>{resource?.description}</div>
@@ -145,7 +145,10 @@ export default function CurriculumResource({
                                 defaultValue={resource.description} 
                             />
                         </div>
-                        <button type="submit" className="pww-button button-green button-small resource-save-button">Save Changes</button>
+                        <button 
+                            type="submit" 
+                            className="pww-button button-green button-small resource-save-button"
+                        >Save Changes</button>
                     </form>
                 </div>
             </Modal>

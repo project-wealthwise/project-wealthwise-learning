@@ -79,7 +79,13 @@ export default function CurriculumPage() {
                         console.log(subject, subject.lessons);
 
                         await saveSubjectChanges(subject);
-                        await setDoc(doc(db, 'subjects', subject.id, 'lessons', subject.lessons[0].id), subject.lessons[0]);
+                        await setDoc(doc(
+                            db, 
+                            'subjects', 
+                            subject.id, 
+                            'lessons', 
+                            subject.lessons[0].id
+                        ), subject.lessons[0]);
                         setSubjects([...subjects, subject]);
                     }}
                 ><b>+</b> Add Subject</button>

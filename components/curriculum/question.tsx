@@ -1,5 +1,5 @@
-import { Question } from "@/lib/curriculum";
-import { useState } from "react";
+import { Question } from '@/lib/curriculum';
+import { useState } from 'react';
 
 type QuestionProps = {
     question: Question
@@ -24,7 +24,10 @@ export default function CurriculumQuestion({
             <div className="answers-container">
                 {answers.map((answer, index) => (
                     <div key={index} className="answer-container">
-                        <label className="answer-label" htmlFor={`answer-${question.id}-${index}`}>Answer {index + 1}:</label>
+                        <label 
+                            className="answer-label" 
+                            htmlFor={`answer-${question.id}-${index}`}
+                        >Answer {index + 1}:</label>
                         <input 
                             type="text"
                             id={`answer-${question.id}-${index}`}

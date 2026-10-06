@@ -33,9 +33,9 @@ export default function Dropdown({
 
     useEffect(() => {
         const handlePointerDown = (event: PointerEvent) => {
-            if (!containerRef.current?.contains(event.target as Node)) {
+            if (!containerRef.current?.contains(event.target as Node)) 
                 setIsOpen(false);
-            }
+            
         };
 
         document.addEventListener('pointerdown', handlePointerDown);
