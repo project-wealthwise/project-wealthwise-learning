@@ -76,6 +76,7 @@
 */
 
 body {
+    background-color: var(--background); /* In case the image doesn't load */
     background: var(--background-image);
     color: var(--foreground);
     font-family: var(--font-main);

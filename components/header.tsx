@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation';
 
 const headerData = [
     { title: 'Home', href: '/'},
-    { title: 'Account', href: '/account'}
+    { title: 'Account', href: '/account'},
+    { title: 'Learn', href: '/learn'}
 ];
 
 export default function Header() {
