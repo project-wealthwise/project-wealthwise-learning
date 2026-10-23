@@ -91,13 +91,13 @@ class DBManager {
             const docId = path[index];
             const cachedDoc = cachedCollection?.docs.find((item) => item.id === docId);
 
-            if (!cachedDoc) {
+            if (!cachedDoc) 
                 return { id: docId, data: {}, exists: false };
-            }
+            
 
-            if (index === path.length - 1) {
+            if (index === path.length - 1) 
                 return cachedDoc;
-            }
+            
 
             const collectionId = path[index + 1];
             cachedCollection = cachedDoc.collections?.find((item) => item.id === collectionId) ?? nullCollection;
@@ -107,9 +107,9 @@ class DBManager {
     }
 
     #setCachedDoc(path: DBPath, data: object): void {
-        if (path.length % 2 !== 0) {
+        if (path.length % 2 !== 0) 
             return;
-        }
+        
 
         let cachedCollection = this.#cache[path[0]];
         if (!cachedCollection) {
@@ -154,9 +154,9 @@ class DBManager {
 
     async updateDoc(path: DBPath, data: object) {
         const d = await this.getDoc(path);
-        for (const [k, v] of Object.entries(data)) {
+        for (const [k, v] of Object.entries(data)) 
             (d.data as Record<string, unknown>)[k] = v;
-        }
+        
         this.setDoc(path, d);
     }
 }

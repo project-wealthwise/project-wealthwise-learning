@@ -18,7 +18,7 @@ export default function CurriculumResource({
 }: ResourceProps) {
     const [resourceType, setResourceType] = useState(String(resource.type ?? 'video'));
     const ResourceEle = (resourceElements as Record<string, ({ resource }: ResourceProps) => JSX.Element>)
-                        [resourceType] ?? 'div';
+        [resourceType] ?? 'div';
     const _modalId = `${resource.id}-resource-modal`;
     const viewModalId = `view-${_modalId}`;
     const editModalId = `edit-${_modalId}`;

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Lesson, Question, Resource, ResourceType, saveLessonChanges } from '@/lib/curriculum';
 import CurriculumResource from './resource';
 import { Modal } from '../modal';
