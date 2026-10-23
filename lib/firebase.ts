@@ -1,7 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
-import { constants } from 'node:crypto';
 import { v4 as uuidv4 } from 'uuid'; 
 
 const firebaseConfig = {
@@ -23,23 +22,23 @@ type Document = {
     data: object,
     exists: boolean,
     collections?: Collection[]
-}
+};
 
 const nullDoc: Document = {
     id: 'null',
     data: {},
     exists: false
-}
+};
 
 type Collection = {
     id: string,
     docs: Document[]
-}
+};
 
 const nullCollection = {
     id: 'null',
     docs: []
-}
+};
 
 type DBCache = { [id: string]: Collection };
 type DBPath = [string, ...string[]];

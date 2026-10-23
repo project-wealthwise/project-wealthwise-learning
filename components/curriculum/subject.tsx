@@ -1,7 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getSubject, Lesson, Resource, ResourceType, saveLessonChanges, saveSubjectChanges, Subject } from '@/lib/curriculum';
+import { 
+    getSubject, 
+    Lesson, 
+    Resource, 
+    ResourceType, 
+    saveLessonChanges, 
+    saveSubjectChanges, 
+    Subject 
+} from '@/lib/curriculum';
 import CurriculumLesson from './lesson';
 import CurriculumResource from './resource';
 import { autoId } from '@/lib/firebase';
@@ -137,8 +145,9 @@ export default function CurriculumSubject({
                             const subjectName = (form.querySelector('#subjectName') as HTMLInputElement).value;
                             const subjectDesc = (form.querySelector('#subjectDesc') as HTMLInputElement).value;
 
-                            await saveSubjectChanges({ ...subject, name: subjectName, description: subjectDesc } as Subject);
-                            setSubject({ ...subject, name: subjectName, description: subjectDesc } as Subject);
+                            const updatedSubject = { ...subject, name: subjectName, description: subjectDesc } as Subject;
+                            await saveSubjectChanges(updatedSubject);
+                            setSubject(updatedSubject);
                             closeModal();
                         }}
                     >

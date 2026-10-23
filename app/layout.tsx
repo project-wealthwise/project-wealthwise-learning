@@ -31,9 +31,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             className={` h-full antialiased`}
         >
             <head>
-                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Raleway' />
-                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=DM Sans' />
-                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Inter' />
+                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Raleway&display=optional' />
+                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=DM Sans&display=optional' />
+                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Inter&display=optional' />
             </head>
             <body className='min-h-full flex flex-col'>
                 <ModalCloseHandler>{children}</ModalCloseHandler>

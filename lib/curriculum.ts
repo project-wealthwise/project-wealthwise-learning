@@ -91,12 +91,13 @@ type Subject = {
 
 export async function getLessons(subjectId: string): Promise<Lesson[]> {
     const lessonDocs = await getDocs(collection(db, 'subjects', subjectId, 'lessons'));
-    const lessons: any[] = lessonDocs.docs.map(doc => ({...doc.data(), id: doc.id}));
+    const lessons: Lesson[] = lessonDocs.docs.map(doc => ({...doc.data(), id: doc.id} as Lesson));
     
-    for (const lesson of lessons)
-        lesson.resources = lesson.resources.map((r: any) => 
+    for (const lesson of lessons) {
+        lesson.resources = lesson.resources.map((r: Resource) => 
             ({...r, ref: ['subjects', subjectId, 'lessons', lesson.id]})
         );
+    }
 
     return lessons as Lesson[];
 }
@@ -107,7 +108,7 @@ export async function getSubject(subjectId: string): Promise<Subject | undefined
     
     const subjectLesssons = await getLessons(subjectId);
     const data = subjectDoc.data();
-    data.resources = data.resources.map((r: any) => ({...r, ref: ['subjects', subjectId]}));
+    data.resources = data.resources.map((r: Resource) => ({...r, ref: ['subjects', subjectId]}));
     const subjectData = { ...data, lessons: subjectLesssons, id: subjectId } as Subject;
     return subjectData;
 }

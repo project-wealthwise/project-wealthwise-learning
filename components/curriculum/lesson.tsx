@@ -21,7 +21,6 @@ export default function CurriculumLesson({
     subjectId,
     onLessonDeleted
 }: LessonProps) {
-    const router = useRouter();
     const [resources, setResources] = useState(lesson.resources);
     const resourceElements = resources.map((resource) =>
         <CurriculumResource

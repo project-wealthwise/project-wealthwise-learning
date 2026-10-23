@@ -52,8 +52,8 @@ export default function AccountPage() {
                     height={100} 
                 />
                 <div className="account-roles">
-                    {user.roles.includes('curriculum-developer') || user.roles.includes('admin') ? 
-                        <button className="pww-button button-green button-small">
+                    {user.roles.includes('curriculum-developer') || user.roles.includes('admin')
+                    ?   <button className="pww-button button-green button-small">
                             <a href='/curriculum'>Edit Curriculum</a>
                         </button>
                     : <div />}

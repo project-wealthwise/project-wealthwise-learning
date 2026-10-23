@@ -3,7 +3,7 @@ import CurriculumVideoResource from './resources/video';
 import CurriculumSlideshowResource from './resources/slideshow';
 import { Modal } from '../modal';
 import { closeModal, openModal } from '@/lib/modal';
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import Dropdown from '../dropdown';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -17,7 +17,8 @@ export default function CurriculumResource({
     resource
 }: ResourceProps) {
     const [resourceType, setResourceType] = useState(String(resource.type ?? 'video'));
-    const ResourceEle = (resourceElements as Record<string, any>)[resourceType] ?? 'div';
+    const ResourceEle = (resourceElements as Record<string, ({ resource }: ResourceProps) => JSX.Element>)
+                        [resourceType] ?? 'div';
     const _modalId = `${resource.id}-resource-modal`;
     const viewModalId = `view-${_modalId}`;
     const editModalId = `edit-${_modalId}`;
@@ -158,10 +159,13 @@ export default function CurriculumResource({
                                     return;
                                 }
 
-                                if (!confirm(`Are you sure you want to delete ${resource.name}? This operation cannot be undone.`)) return;
+                                if (!confirm(`Are you sure you want to delete ${resource.name}? This operation cannot be undone.`)) 
+                                    return;
                                 
                                 await updateDoc(doc(db, ...resource.ref), {
-                                    resources: (await getDoc(doc(db, ...resource.ref))).data()?.resources?.filter((r: Resource) => r.id !== resource.id)
+                                    resources: (await getDoc(doc(db, ...resource.ref)))
+                                        .data()?.resources
+                                        ?.filter((r: Resource) => r.id !== resource.id)
                                 });
                                 closeModal();
                             }}

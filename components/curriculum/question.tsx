@@ -1,6 +1,4 @@
-import { Lesson, Question } from '@/lib/curriculum';
-import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { Question } from '@/lib/curriculum';
 import { useState } from 'react';
 
 type QuestionProps = {
@@ -84,7 +82,8 @@ export default function CurriculumQuestion({
                     <button
                         className="pww-button button-red button-small delete-question-button"
                         onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete this question? This operation cannot be undone.`)) return;
+                            if (!confirm(`Are you sure you want to delete this question? This operation cannot be undone.`))
+                                return;
                             onQuestionDeleted?.(question.id);
                         }}
                     ><b>-</b> Delete Question</button>
