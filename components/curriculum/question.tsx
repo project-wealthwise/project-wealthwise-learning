@@ -1,15 +1,23 @@
-import { Question } from '@/lib/curriculum';
+import { Lesson, Question } from '@/lib/curriculum';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 
 type QuestionProps = {
-    question: Question
+    question: Question,
+    onQuestionDeleted?: (questionId: string) => void,
+    onQuestionUpdated?: (updatedQuestion: Question) => void
 };
 
 export default function CurriculumQuestion({
-    question
+    question,
+    onQuestionDeleted,
+    onQuestionUpdated
 }: QuestionProps) {
     const [questionText, setQuestionText] = useState(question.question);
     const [answers, setAnswers] = useState(question.answers);
+
+    console.log('Rendering question', question.id, 'with answers', answers);
 
     return (
         <div className="question-container">
@@ -31,11 +39,12 @@ export default function CurriculumQuestion({
                         <input 
                             type="text"
                             id={`answer-${question.id}-${index}`}
-                            defaultValue={answer.answer}
+                            value={answer.answer}
                             onChange={(e) => {
                                 const newAnswers = [...answers];
                                 newAnswers[index].answer = e.target.value;
                                 setAnswers(newAnswers);
+                                onQuestionUpdated?.({...question, answers: newAnswers});
                             }}
                             className="answer-input pww-input form-input"
                         ></input>
@@ -48,11 +57,38 @@ export default function CurriculumQuestion({
                                 const newAnswers = [...answers];
                                 newAnswers[index].correct = e.target.checked;
                                 setAnswers(newAnswers);
+                                onQuestionUpdated?.({...question, answers: newAnswers});
                             }}
                             className="correct-checkbox"
                         ></input>
+                        <button
+                            className="pww-button button-small button-red delete-answer-button"
+                            onClick={() => {
+                                const newAnswers = answers.filter((_, i) => i !== index);
+                                console.log('Deleting answer at index', index, 'New answers:', newAnswers);
+                                setAnswers(newAnswers);
+                                onQuestionUpdated?.({...question, answers: newAnswers});
+                            }}
+                        ><b>-</b> Delete Answer</button>
                     </div>
                 ))}
+                <div className="question-buttons">
+                    <button
+                        className="pww-button button-small button-green add-answer-button"
+                        onClick={() => {
+                            const newAnswers = [...answers, { answer: '', correct: false }];
+                            setAnswers(newAnswers);
+                            onQuestionUpdated?.({...question, answers: newAnswers});
+                        }}
+                    ><b>+</b> Add Answer</button>
+                    <button
+                        className="pww-button button-red button-small delete-question-button"
+                        onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete this question? This operation cannot be undone.`)) return;
+                            onQuestionDeleted?.(question.id);
+                        }}
+                    ><b>-</b> Delete Question</button>
+                </div>
             </div>
         </div>
     );

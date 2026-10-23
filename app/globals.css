@@ -135,11 +135,13 @@ h1 {
 .pww-button:hover {
     background-color: var(--background-blue);
     color: var(--foreground);
+    border-color: var(--opposite-blue);
 }
 
 .button-green:hover {
     background-color: var(--background-green);
     color: var(--foreground);
+    border-color: var(--opposite-green);
 }
 
 .button-red:hover {

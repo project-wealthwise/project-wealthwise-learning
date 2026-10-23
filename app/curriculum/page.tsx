@@ -7,6 +7,7 @@ import { collection, doc, DocumentData, getDoc, getDocs, setDoc } from 'firebase
 import { useRouter } from 'next/navigation';
 import CurriculumSubject from '@/components/curriculum/subject';
 import { saveSubjectChanges, Subject } from '@/lib/curriculum';
+import { closeModal } from '@/lib/modal';
 
 const editorRoles = ['admin', 'curriculum-developer'];
 
@@ -76,7 +77,6 @@ export default function CurriculumPage() {
                                 }
                             ],
                         };
-                        console.log(subject, subject.lessons);
 
                         await saveSubjectChanges(subject);
                         await setDoc(doc(

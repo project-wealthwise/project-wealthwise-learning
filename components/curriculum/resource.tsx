@@ -149,6 +149,25 @@ export default function CurriculumResource({
                             type="submit" 
                             className="pww-button button-green button-small resource-save-button"
                         >Save Changes</button>
+                        <button
+                            className='pww-button button-red button-small resource-delete-button'
+                            onClick={async () => {
+                                if (!resource.ref) {
+                                    console.error('No ref attached to resource');
+                                    alert('An error occured.');
+                                    return;
+                                }
+
+                                if (!confirm(`Are you sure you want to delete ${resource.name}? This operation cannot be undone.`)) return;
+                                
+                                await updateDoc(doc(db, ...resource.ref), {
+                                    resources: (await getDoc(doc(db, ...resource.ref))).data()?.resources?.filter((r: Resource) => r.id !== resource.id)
+                                });
+                                closeModal();
+                            }}
+                        >
+                            <b>-</b> Delete Resource
+                        </button>
                     </form>
                 </div>
             </Modal>

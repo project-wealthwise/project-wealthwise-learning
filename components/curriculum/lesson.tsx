@@ -1,26 +1,27 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Lesson, Question, Resource, ResourceType, saveLessonChanges } from '@/lib/curriculum';
 import CurriculumResource from './resource';
 import { Modal } from '../modal';
-import { openModal } from '@/lib/modal';
+import { closeModal, openModal } from '@/lib/modal';
 import { autoId } from '@/lib/firebase';
 import CurriculumQuestion from './question';
 
-// import { useEffect, useState } from "react";
-// import { getSubject, Subject } from "@/lib/curriculum";
-
 type LessonProps = {
     lesson: Lesson,
-    subjectId: string
+    subjectId: string,
+    onLessonDeleted: (lessonId: string) => void
 };
 
 
 export default function CurriculumLesson({
     lesson,
-    subjectId
+    subjectId,
+    onLessonDeleted
 }: LessonProps) {
+    const router = useRouter();
     const [resources, setResources] = useState(lesson.resources);
     const resourceElements = resources.map((resource) =>
         <CurriculumResource
@@ -34,6 +35,16 @@ export default function CurriculumLesson({
         <CurriculumQuestion
             key={question.id}
             question={question}
+            onQuestionUpdated={(updatedQuestion: Question) => {
+                setQuestions((currentQuestions) => currentQuestions.map((currentQuestion) =>
+                    currentQuestion.id === updatedQuestion.id ? updatedQuestion : currentQuestion
+                ));
+            }}
+            onQuestionDeleted={(questionId) => {
+                const updatedQuestions = questions.filter(q => q.id !== questionId);
+                setQuestions(updatedQuestions);
+                saveLessonChanges(subjectId, { ...lesson, questions: updatedQuestions });
+            }}
         />
     );
 
@@ -49,9 +60,19 @@ export default function CurriculumLesson({
                 style={{margin: '0.5rem 0'}}
             >Edit Resources</button>
             <button 
-                className="pww-button button-green button-small"
+                className="pww-button button-blue button-small"
                 onClick={() => openModal(`${lesson.id}-questions-modal`)}
             >Edit Questions</button>
+            <button 
+                className="pww-button button-red button-small"
+                style={{margin: '0.5rem 0'}}
+                onClick={async () => {
+                    if (lesson && confirm(`Are you sure you want to delete ${lesson.name}?`)) {
+                        await saveLessonChanges(subjectId, { ...lesson, deleted: true });
+                        onLessonDeleted(lesson.id);
+                    }
+                }}
+            >Delete Lesson</button>
             <Modal modalId={`${lesson.id}-resources-modal`}>
                 <h2 className="font-title edit-resource-header">Edit {lesson.name} Resources</h2>
                 <div className="resources-container">
@@ -100,7 +121,13 @@ export default function CurriculumLesson({
                 <button
                     className="pww-button button-green button-small question-save-button"
                     onClick={() => {
-                        saveLessonChanges(subjectId, { ...lesson, questions });
+                        const updatedQuestions = questions.map((question) => ({
+                            ...question,
+                            answers: question.answers.map((answer) => ({ ...answer }))
+                        }));
+                        setQuestions(updatedQuestions);
+                        saveLessonChanges(subjectId, { ...lesson, questions: updatedQuestions });
+                        closeModal();
                     }}
                 >Save Changes</button>
             </Modal>
