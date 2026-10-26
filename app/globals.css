@@ -299,11 +299,13 @@ h1 {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 60%;
-    height: auto;
+    max-height: 90vh;
+    /* height: auto; */
     margin: auto;
     margin-top: 9vh;
     border: 1.5px solid var(--foreground);
     position: relative;
+    overflow-y: auto;
 }
 
 .close-button {

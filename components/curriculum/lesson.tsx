@@ -11,14 +11,16 @@ import CurriculumQuestion from './question';
 type LessonProps = {
     lesson: Lesson,
     subjectId: string,
-    onLessonDeleted: (lessonId: string) => void
+    onLessonDeleted: (lessonId: string) => void,
+    onLessonUpdated: (updatedLesson: Lesson) => void
 };
 
 
 export default function CurriculumLesson({
     lesson,
     subjectId,
-    onLessonDeleted
+    onLessonDeleted,
+    onLessonUpdated
 }: LessonProps) {
     const [resources, setResources] = useState(lesson.resources);
     const resourceElements = resources.map((resource) =>
@@ -53,6 +55,10 @@ export default function CurriculumLesson({
             </div>
             <div className='lesson-description'>{lesson?.description}</div>
             <button 
+                className="pww-button button-blue button-small"
+                onClick={() => openModal(`${lesson.id}-details-modal`)}
+            >Edit Details</button>
+            <button 
                 className="pww-button button-green button-small"
                 onClick={() => openModal(`${lesson.id}-resources-modal`)}
                 style={{margin: '0.5rem 0'}}
@@ -71,6 +77,37 @@ export default function CurriculumLesson({
                     }
                 }}
             >Delete Lesson</button>
+            <Modal modalId={`${lesson.id}-details-modal`}>
+                <h2 className="font-title edit-resource-header">Edit {lesson.name} Details</h2>
+                <div className="lesson-details-container">
+                    <div>
+                        <label htmlFor="lesson-name" className="edit-resource-label">Lesson Name</label>
+                        <input
+                            id="lesson-name"
+                            className="pww-input lesson-name-input"
+                            type="text"
+                            defaultValue={lesson.name}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="lesson-description" className="edit-resource-label">Lesson Description</label>
+                        <input
+                            id="lesson-description"
+                            className="pww-input lesson-description-input"
+                            type="text"
+                            defaultValue={lesson.description}
+                        />
+                    </div>
+                    <button className="pww-button button-green button-small save-subject-button" onClick={() => {
+                        const lessonName = document.querySelector('#lesson-name') as HTMLInputElement;
+                        const lessonDescription = document.querySelector('#lesson-description') as HTMLInputElement;
+                        const updatedLesson = { ...lesson, name: lessonName.value, description: lessonDescription.value };
+                        saveLessonChanges(subjectId, updatedLesson);
+                        onLessonUpdated(updatedLesson);
+                        closeModal();
+                    }}>Save changes</button>
+                </div>
+            </Modal>
             <Modal modalId={`${lesson.id}-resources-modal`}>
                 <h2 className="font-title edit-resource-header">Edit {lesson.name} Resources</h2>
                 <div className="resources-container">

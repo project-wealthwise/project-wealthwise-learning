@@ -57,6 +57,10 @@ export default function CurriculumSubject({
                     setSubject({...subject, lessons: updatedLessons } as Subject);
                     saveSubjectChanges({ ...subject, lessons: updatedLessons } as Subject);
                 }}
+                onLessonUpdated={(updatedLesson: Lesson) => {
+                    const updatedLessons = subject?.lessons.map(l => l.id === updatedLesson.id ? updatedLesson : l);
+                    setSubject({...subject, lessons: updatedLessons } as Subject);
+                }}
             />
         );
 
