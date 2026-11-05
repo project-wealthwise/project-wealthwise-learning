@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import Header from '@/components/header';
-import { auth, autoId, db } from '@/lib/firebase';
-import { collection, doc, DocumentData, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { auth, autoId, dbManager } from '@/lib/firebase';
+import type { DocumentData } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import CurriculumSubject from '@/components/curriculum/subject';
 import { saveSubjectChanges, Subject } from '@/lib/curriculum';
@@ -18,8 +18,8 @@ export default function CurriculumPage() {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            const userData = (await getDoc(doc(db, 'users', currentUser?.uid ?? ''))).data();
-            setUser(userData ?? null);
+            const userDocument = await dbManager.getDoc(['users', currentUser?.uid ?? '']);
+            setUser(userDocument.exists ? userDocument.data : null);
             setAuthLoading(false);
         });
 
@@ -35,8 +35,8 @@ export default function CurriculumPage() {
     useEffect(() => {
         if (!authLoading && user && editorRoles.some(role => user.roles?.includes(role))) {
             const fetchSubjects = async () => {
-                const subjectsCollection = await getDocs(collection(db, 'subjects'));
-                setSubjects(subjectsCollection.docs.map((doc) => doc.data() as Subject));
+                const subjectsCollection = await dbManager.getCollection(['subjects']);
+                setSubjects(subjectsCollection.docs.map((doc) => doc.data as Subject));
             };
 
             fetchSubjects();
@@ -78,13 +78,10 @@ export default function CurriculumPage() {
                         };
 
                         await saveSubjectChanges(subject);
-                        await setDoc(doc(
-                            db, 
-                            'subjects', 
-                            subject.id, 
-                            'lessons', 
-                            subject.lessons[0].id
-                        ), subject.lessons[0]);
+                        await dbManager.setDoc(
+                            ['subjects', subject.id, 'lessons', subject.lessons[0].id],
+                            subject.lessons[0]
+                        );
                         setSubjects([...subjects, subject]);
                     }}
                 ><b>+</b> Add Subject</button>

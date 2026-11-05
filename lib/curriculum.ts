@@ -1,5 +1,4 @@
-import { getDoc, doc, getDocs, collection, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { dbManager } from '@/lib/firebase';
 
 export const resourceTypes = [
     'video',
@@ -90,8 +89,8 @@ type Subject = {
 };
 
 export async function getLessons(subjectId: string): Promise<Lesson[]> {
-    const lessonDocs = await getDocs(collection(db, 'subjects', subjectId, 'lessons'));
-    const lessons: Lesson[] = lessonDocs.docs.map(doc => ({...doc.data(), id: doc.id} as Lesson));
+    const lessonDocs = await dbManager.getCollection(['subjects', subjectId, 'lessons']);
+    const lessons: Lesson[] = lessonDocs.docs.map(doc => ({...doc.data, id: doc.id} as Lesson));
     
     for (const lesson of lessons) {
         lesson.resources = lesson.resources.map((r: Resource) => 
@@ -103,11 +102,11 @@ export async function getLessons(subjectId: string): Promise<Lesson[]> {
 }
 
 export async function getSubject(subjectId: string): Promise<Subject | undefined> {
-    const subjectDoc = await getDoc(doc(db, 'subjects', subjectId));
-    if (!subjectDoc.exists()) return undefined;
+    const subjectDoc = await dbManager.getDoc(['subjects', subjectId]);
+    if (!subjectDoc.exists) return undefined;
     
     const subjectLesssons = await getLessons(subjectId);
-    const data = subjectDoc.data();
+    const data = subjectDoc.data as Omit<Subject, 'lessons' | 'id'>;
     data.resources = data.resources.map((r: Resource) => ({...r, ref: ['subjects', subjectId]}));
     const subjectData = { ...data, lessons: subjectLesssons, id: subjectId } as Subject;
     return subjectData;
@@ -115,11 +114,11 @@ export async function getSubject(subjectId: string): Promise<Subject | undefined
 
 export async function saveSubjectChanges(subject: Subject) {
     const processed = (({ lessons, ...o }) => o)(subject);
-    await setDoc(doc(db, 'subjects', subject.id), processed);
+    await dbManager.setDoc(['subjects', subject.id], processed);
 }
 
 export async function saveLessonChanges(subjectId: string, lesson: Lesson) {
-    await setDoc(doc(db, 'subjects', subjectId, 'lessons', lesson.id), lesson);
+    await dbManager.setDoc(['subjects', subjectId, 'lessons', lesson.id], lesson);
 }
 
 export type { 

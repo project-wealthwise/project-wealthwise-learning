@@ -11,14 +11,13 @@ import {
     UserCredential,
     createUserWithEmailAndPassword,
 } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, dbManager } from '@/lib/firebase';
 import Header from '@/components/header';
 import LoginButton from '@/components/account/loginButton';
 import { FirebaseError } from 'firebase/app';
 
 async function firestoreLogin(result: UserCredential) {
-    await setDoc(doc(db, 'users', result.user.uid), {
+    await dbManager.setDoc(['users', result.user.uid], {
         displayName: result.user.displayName ?? result.user.email?.split('@')[0] ?? 'User', 
         email: result.user.email, 
         uid: result.user.uid, 

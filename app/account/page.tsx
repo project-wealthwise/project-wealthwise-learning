@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/header';
-import { auth, db } from '@/lib/firebase';
-import { doc, DocumentData, getDoc, updateDoc } from 'firebase/firestore';
+import { auth, dbManager } from '@/lib/firebase';
+import type { DocumentData } from 'firebase/firestore';
 import { Modal } from '@/components/modal';
 import { openModal } from '@/lib/modal';
 
@@ -17,8 +17,8 @@ export default function AccountPage() {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            const userData = (await getDoc(doc(db, 'users', currentUser?.uid ?? ''))).data();
-            setUser(userData ?? null);
+            const userDocument = await dbManager.getDoc(['users', currentUser?.uid ?? 'null']);
+            setUser(userDocument.exists ? userDocument.data : null);
             setAuthLoading(false);
         });
 
@@ -78,7 +78,7 @@ export default function AccountPage() {
                             });
                         }
 
-                        await updateDoc(doc(db, 'users', auth.currentUser?.uid ?? ''), {
+                        await dbManager.updateDoc(['users', auth.currentUser?.uid ?? ''], {
                             displayName,
                             pfpUrl,
                         });

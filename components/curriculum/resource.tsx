@@ -5,8 +5,7 @@ import { Modal } from '../modal';
 import { closeModal, openModal } from '@/lib/modal';
 import { JSX, useState } from 'react';
 import Dropdown from '../dropdown';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { dbManager } from '@/lib/firebase';
 
 const resourceElements = {
     video: CurriculumVideoResource,
@@ -70,9 +69,7 @@ export default function CurriculumResource({
                             description: resourceDesc
                         };
 
-                        const resourceDoc = doc(db, ...resource.ref);
-                        const rDoc = await getDoc(resourceDoc);
-                        const documentData = rDoc.data();
+                        const documentData = (await dbManager.getDoc(resource.ref)).data;
                         let fieldToUpdate: string | undefined;
                         const updateResourceArray = (value: any, topLevelField?: string): boolean => {
                             if (!value || typeof value !== 'object') return false;
@@ -96,7 +93,7 @@ export default function CurriculumResource({
                         }
 
                         closeModal();
-                        await updateDoc(resourceDoc, { [fieldToUpdate!]: documentData[fieldToUpdate!] });
+                        await dbManager.updateDoc(resource.ref, { [fieldToUpdate!]: documentData[fieldToUpdate!] });
                     }}>
                         <div>
                             <label htmlFor="resourceName">Resource Name</label>
@@ -162,9 +159,9 @@ export default function CurriculumResource({
                                 if (!confirm(`Are you sure you want to delete ${resource.name}? This operation cannot be undone.`)) 
                                     return;
                                 
-                                await updateDoc(doc(db, ...resource.ref), {
-                                    resources: (await getDoc(doc(db, ...resource.ref)))
-                                        .data()?.resources
+                                const resourceDocument = await dbManager.getDoc(resource.ref);
+                                await dbManager.updateDoc(resource.ref, {
+                                    resources: (resourceDocument.data.resources as Resource[])
                                         ?.filter((r: Resource) => r.id !== resource.id)
                                 });
                                 closeModal();
