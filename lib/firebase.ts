@@ -191,7 +191,7 @@ export class DBManager {
             throw new Error('Document paths must have an even number of segments.');
         const cached = this.#getCachedDoc(path);
         if (cached)
-            return cached;
+            return {...cached};
         const fetched = await this.#getDoc(path);
         this.#setCachedDoc(path, fetched.data, fetched.exists);
         return fetched;
@@ -202,7 +202,7 @@ export class DBManager {
             throw new Error('Collection paths must have an odd number of segments.');
         const cached = this.#getCachedCollection(path);
         if (cached)
-            return cached;
+            return {...cached};
         const fetched = await this.#getCollection(path);
         this.#setCachedCollection(path, fetched);
         return fetched;

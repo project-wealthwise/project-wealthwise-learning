@@ -57,6 +57,11 @@ export default function AccountPage() {
                             <a href='/curriculum'>Edit Curriculum</a>
                         </button>
                         : <div />}
+                    {user.roles.includes('admin')
+                        ?   <button className="pww-button button-blue button-small">
+                            <a href='/admin'>Admin Panel</a>
+                        </button>
+                        : <div />}
                 </div>
                 <button className="pww-button button-green button-small" onClick={() => {
                     openModal('edit-profile-modal');

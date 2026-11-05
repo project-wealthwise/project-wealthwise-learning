@@ -8,7 +8,6 @@ export default function CurriculumVideoResource({
         || resource.link.match(/https:\/\/youtu\.be\/(.*?)($|\?)/)?.[1]
         || '';
     const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
-    console.log(videoId, resource.link);
 
     return (
         <>

@@ -15,8 +15,6 @@ export default function CurriculumQuestion({
     const [questionText, setQuestionText] = useState(question.question);
     const [answers, setAnswers] = useState(question.answers);
 
-    console.log('Rendering question', question.id, 'with answers', answers);
-
     return (
         <div className="question-container">
             <label className="question-label font-medium" htmlFor={`question-${question.id}`}>Question:</label>
@@ -63,7 +61,6 @@ export default function CurriculumQuestion({
                             className="pww-button button-small button-red delete-answer-button"
                             onClick={() => {
                                 const newAnswers = answers.filter((_, i) => i !== index);
-                                console.log('Deleting answer at index', index, 'New answers:', newAnswers);
                                 setAnswers(newAnswers);
                                 onQuestionUpdated?.({...question, answers: newAnswers});
                             }}

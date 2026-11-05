@@ -81,26 +81,26 @@ export default function CurriculumLesson({
                 <h2 className="font-title edit-resource-header">Edit {lesson.name} Details</h2>
                 <div className="lesson-details-container">
                     <div>
-                        <label htmlFor="lesson-name" className="edit-resource-label">Lesson Name</label>
+                        <label htmlFor={`${lesson.id}-lesson-name`} className="edit-resource-label">Lesson Name</label>
                         <input
-                            id="lesson-name"
+                            id={`${lesson.id}-lesson-name`}
                             className="pww-input lesson-name-input"
                             type="text"
                             defaultValue={lesson.name}
                         />
                     </div>
                     <div>
-                        <label htmlFor="lesson-description" className="edit-resource-label">Lesson Description</label>
+                        <label htmlFor={`${lesson.id}-lesson-description`} className="edit-resource-label">Lesson Description</label>
                         <input
-                            id="lesson-description"
+                            id={`${lesson.id}-lesson-description`}
                             className="pww-input lesson-description-input"
                             type="text"
                             defaultValue={lesson.description}
                         />
                     </div>
                     <button className="pww-button button-green button-small save-subject-button" onClick={() => {
-                        const lessonName = document.querySelector('#lesson-name') as HTMLInputElement;
-                        const lessonDescription = document.querySelector('#lesson-description') as HTMLInputElement;
+                        const lessonName = document.querySelector(`#${lesson.id}-lesson-name`) as HTMLInputElement;
+                        const lessonDescription = document.querySelector(`#${lesson.id}-lesson-description`) as HTMLInputElement;
                         const updatedLesson = { ...lesson, name: lessonName.value, description: lessonDescription.value };
                         saveLessonChanges(subjectId, updatedLesson);
                         onLessonUpdated(updatedLesson);
