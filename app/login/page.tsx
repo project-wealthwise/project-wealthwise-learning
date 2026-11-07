@@ -7,7 +7,7 @@ import {
     setPersistence,
     signInWithPopup,
     browserLocalPersistence,
-    User,
+    User as FirebaseUser,
     UserCredential,
     createUserWithEmailAndPassword,
 } from 'firebase/auth';
@@ -27,7 +27,7 @@ async function firestoreLogin(result: UserCredential) {
 }
 
 export default function LoginPage() {
-    const [, setUser] = useState<User | null>(null);
+    const [, setUser] = useState<FirebaseUser | null>(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

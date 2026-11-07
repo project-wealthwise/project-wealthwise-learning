@@ -1,0 +1,98 @@
+.admin-option-container {
+    padding: 14px;
+    padding-top: 5px;
+    border-radius: 18px;
+    border: 1px solid var(--foreground);
+    background-color: color-mix(in srgb, var(--background-blue), transparent 40%);
+    cursor: pointer;
+}
+
+.admin-content {
+    display: grid;
+    grid-template-columns: max-content 400px;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.admin-option-header {
+    font-size: 1.3rem;
+}
+
+.admin-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.admin-users-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--foreground);
+    background-color: color-mix(in srgb, var(--background-gray), transparent 40%);
+    margin-top: 10px;
+}
+
+.admin-user-edit-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-user-edit-submit {
+    grid-column: span 2;
+}
+
+.admin-user-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.admin-role-container {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+}
+
+.admin-role-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.admin-role-header {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+.admin-role-remove-btn {
+    padding: 2px 5px;
+    font-size: 0.8rem;
+}
+
+.admin-role-add-btn {
+    margin: auto;
+    margin-bottom: 5px;
+}

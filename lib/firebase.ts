@@ -229,3 +229,5 @@ export const dbManager = new DBManager();
 export function autoId() {
     return uuidv4();
 }
+
+export const collections = ['subjects', 'users']; // must be manually updated
